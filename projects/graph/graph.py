@@ -63,7 +63,7 @@ class Graph:
         Print each vertex in depth-first order
         beginning from starting_vertex.
         """
-        # create a plan to visit queue and add starting_vertex to it
+        # create a plan to visit stack and add starting_vertex to it
         plan_to_visit = Stack()
         plan_to_visit.push(starting_vertex)
         # create a Set for visited_vertices
@@ -71,7 +71,7 @@ class Graph:
 
         # while the plan_to_visit stack is not Empty:
         while plan_to_visit.size() > 0:
-            # pop the first vertex on the queue
+            # pop the first vertex on the stack
             current_vertex = plan_to_visit.pop()
             # if its not been visited
             if current_vertex not in visited_vertices:
@@ -84,14 +84,31 @@ class Graph:
                     if neighbor not in visited_vertices:
                         plan_to_visit.push(neighbor)
 
-    def dft_recursive(self, starting_vertex):
+    def dft_recursive(self, starting_vertex, visited=set()):
         """
         Print each vertex in depth-first order
         beginning from starting_vertex.
 
         This should be done using recursion.
         """
-        pass  # TODO
+        # add starting vertex to visited
+        visited.add(starting_vertex)
+        print(starting_vertex)
+        # get the neighbors of the starting vertex
+        neighbors = self.get_neighbors(starting_vertex)
+
+        # if no neighbors, return
+        # else for each neighbor
+            # if it is not in visited, run recursion with neighbor as starting vertex
+            # else return
+        if len(neighbors) == 0:
+            return
+        else:
+            for neighbor in neighbors:
+                if neighbor not in visited:
+                    self.dft_recursive(neighbor, visited)
+                else:
+                    return
 
     def bfs(self, starting_vertex, destination_vertex):
         """
