@@ -211,7 +211,6 @@ class Graph:
 
         # for each neighbor
         for neighbor in neighbors:
-            print(path)
             # if the neighbor is not in visited, return the dfs_recursive(neighbor, destination, visited, path)
             if neighbor not in visited:
                 next_path = self.dfs_recursive(neighbor, destination_vertex, visited, path)
@@ -294,5 +293,5 @@ if __name__ == '__main__':
     '''
     print('dfs')
     print(graph.dfs(1, 6))
-    print('bfs_recursive')
+    print('dfs_recursive')
     print(graph.dfs_recursive(1, 6))
