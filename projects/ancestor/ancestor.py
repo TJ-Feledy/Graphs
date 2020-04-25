@@ -18,6 +18,7 @@ def earliest_ancestor(ancestors, starting_node):
     queue.enqueue([starting_node])
     # create a set for visited_vertices
     visited = set()
+    # create a place holder for previous parents
     prev_parents = []
 
     # while the queue is not empty
@@ -31,33 +32,35 @@ def earliest_ancestor(ancestors, starting_node):
         if curr_node  not in visited:
             # mark it as visited
             visited.add(curr_node)
-            # make new versions of the current path, with each neighbor added to them
+            # create a parents list
             parents = []
 
+            # for each relationship, add the parent to the parents list
             for relation in ancestors:
                 if relation[1] == curr_node:
                     parents.append(relation[0])
-            print('parents', parents)
-
+            # if there are parents, update prev_parents
             if len(parents) > 0:
                 prev_parents = parents
+                # for each parent
                 for parent in parents:
                     # dubplicate the path
                     new_path = list(curr_path)
-                    # add the neighbor
+                    # add the parent to the path
                     new_path.append(parent)
                     # add the new path to the queue
                     queue.enqueue(new_path)
 
-    print('prev_parent', prev_parents)
-
+    # if more than one node has been visited and there is more than one previous parents
     if len(visited) > 1 and len(prev_parents) > 1:
+        # set an eldest parent and compare it to the other parents to find the eldest parent.
         eldest = prev_parents[0]
         for parent in prev_parents:
             if parent < eldest:
                 eldest = parent
         return eldest
+    # else if more than one node has been visited and there are no parents, return the current node.
     elif len(visited) > 1 and len(parents) == 0:
         return curr_node
-
+    # else return -1
     return -1
