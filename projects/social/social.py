@@ -103,7 +103,7 @@ class SocialGraph:
             if curr_vertex  not in visited:
                 # mark it as visited
                 visited.update({curr_vertex : curr_path})
-                # make new versions of the current path, with each neighbor added to them
+                # make new versions of the current path, with each friend added to them
                 friends = self.friendships[curr_vertex]
 
                 for friend in friends:
@@ -112,7 +112,6 @@ class SocialGraph:
                         new_path = list(curr_path)
                         # add the friend
                         new_path.append(friend)
-                        print(new_path)
                         # add the new path to the queue
                         queue.enqueue(new_path)
         
