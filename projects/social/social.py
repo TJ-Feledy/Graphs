@@ -1,3 +1,18 @@
+import random
+
+class Queue():
+    def __init__(self):
+        self.queue = []
+    def enqueue(self, value):
+        self.queue.append(value)
+    def dequeue(self):
+        if self.size() > 0:
+            return self.queue.pop(0)
+        else:
+            return None
+    def size(self):
+        return len(self.queue)
+
 class User:
     def __init__(self, name):
         self.name = name
@@ -42,11 +57,24 @@ class SocialGraph:
         self.last_id = 0
         self.users = {}
         self.friendships = {}
-        # !!!! IMPLEMENT ME
-
         # Add users
-
+        for i in range(0, num_users):
+            self.add_user(f'User {i}')
         # Create friendships
+        # Generate all possible friendship combinations
+        possible_friendships = []
+        # Avoid duplicates by ensuring the first number is smaller than the second
+        for user_id in self.users:
+            for friend_id in range(user_id + 1, self.last_id + 1):
+                possible_friendships.append((user_id, friend_id))
+        # Shuffle the possible friendships
+        random.shuffle(possible_friendships)
+        # Create friendships for the first X pairs of the list
+        # X is determined by the formula: num_users * avg_friendships // 2
+        # Need to divide by 2 since each add_friendship() creates 2 friendships
+        for i in range(num_users * avg_friendships // 2):
+            friendship = possible_friendships[i]
+            self.add_friendship(friendship[0], friendship[1])
 
     def get_all_social_paths(self, user_id):
         """
@@ -57,8 +85,37 @@ class SocialGraph:
 
         The key is the friend's ID and the value is the path.
         """
+
+        # create a empty queue, and enqueue a PATH to the starting vertex
+        queue = Queue()
+        queue.enqueue([user_id])
+        # create a dictionary for visited friends
         visited = {}  # Note that this is a dictionary, not a set
-        # !!!! IMPLEMENT ME
+
+        # while the queue is not empty
+        while queue.size() > 0:
+            # dequeue the first PATH
+            curr_path = queue.dequeue()
+            # grab the last vertex in the path
+            curr_vertex = curr_path[-1]
+
+            # if it hasn't been visited
+            if curr_vertex  not in visited:
+                # mark it as visited
+                visited.update({curr_vertex : curr_path})
+                # make new versions of the current path, with each neighbor added to them
+                friends = self.friendships[curr_vertex]
+
+                for friend in friends:
+                    if friend not in visited:
+                        # dubplicate the path
+                        new_path = list(curr_path)
+                        # add the friend
+                        new_path.append(friend)
+                        print(new_path)
+                        # add the new path to the queue
+                        queue.enqueue(new_path)
+        
         return visited
 
 
